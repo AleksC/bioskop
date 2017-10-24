@@ -7,7 +7,15 @@ petar = {"korisnickoIme": "Petar123",
          "uloga": "menadzer"
          }
 
-korisnici = {"korisnik": petar}
+milan = {"korisnickoIme": "Milan123",
+         "sifra": "123",
+         "ime": "Milan",
+         "prezime": "Milanovic",
+         "uloga": "prodavac"
+         }
+
+korisnici = {"korisnik": petar,
+             "korisnik": milan}
 
 
 def login():
@@ -23,10 +31,10 @@ def login():
             
     elif username == "" or password == "":
           print("Korisnicko ime i/ili lozinka ne mogu biti prazni!")
-          main.login()
+          login()
     else:
           print("Korisnicko ime i/ili lozinka nisu pronadjeni!")
-          main.login()
+          login()
 
 
         
