@@ -1,5 +1,4 @@
-import user
-import projekcije
+import main
 
 def glavniMeni(uloga):
     if uloga == "menadzer":
@@ -10,18 +9,20 @@ def glavniMeni(uloga):
         print("4 - Izmena projekcije")
         izbor = int(input("Odaberite opciju: "))
         if izbor == 0:
-            user.login()
+            main.user.login()
         elif izbor == 1:
-            projekcije.pretragaProjekcija()
+            main.projekcije.pretragaProjekcija()
         elif izbor == 2:
-            projekcije.unosProjekcije()
+            main.projekcije.unosProjekcije()
+            return glavniMeni("menadzer")
         elif izbor == 3:
-            projekcije.brisanjeProjekcije()
+            main.projekcije.brisanjeProjekcije()
+            glavniMeni("menadzer")
         elif izbor == 4:
             projekcije.izmenaProjekcije()
         else:
             print("Odabrana nepostojeca opcija! Molimo odaberite neke od narednih opcija")
-            glavniMeni("menadzer")
+            return glavniMeni("menadzer")
             
     elif uloga == "prodavac":
         print("0 - Log out")
@@ -29,9 +30,9 @@ def glavniMeni(uloga):
         print("2 - Prodaja karata")
         izbor = int(input("Odaberite opciju: "))
         if izbor == 0:
-            user.login()
+            main.user.login()
         elif izbor == 1:
-            projekcije.pretragaProjekcija()
+            main.projekcije.pretragaProjekcija()
         elif izbor == 2:
             prodajaKarata()
         else:
