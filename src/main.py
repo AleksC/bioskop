@@ -1,8 +1,8 @@
 from korisnik import login
 from projekcije import *
+from racun import racun
 
 nepostojeca_opcija = "Odabrana nepostojeca opcija! Molimo odaberite neku od ponudjenih opcija."
-nepostojeca_funkcija = "Ova opcija nije omogucena."
 
 def main():
     while True:
@@ -27,9 +27,9 @@ def glavni_meni(korisnik):
                 elif izbor == 3:
                     brisanje_projekcije()
                 elif izbor == 4:
-                    print(nepostojeca_funkcija)
-                else:
                     izmena_projekcije()
+                else:
+                    print(nepostojeca_opcija)
             except ValueError:
                 print(nepostojeca_opcija)
 
@@ -45,7 +45,7 @@ def glavni_meni(korisnik):
                 elif izbor == 1:
                     pretraga_projekcija()
                 elif izbor == 2:
-                    print(nepostojeca_opcija)
+                    racun()
                 else:
                     print(nepostojeca_opcija)
             except ValueError:

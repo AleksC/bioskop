@@ -11,17 +11,28 @@ filmovi = [{"id": 0,
             "zanr": "fantasy"
             }]
 
+sale = [{"ime_sale": "A1",
+         "kapacitet": 150},
+        {"ime_sale": "A2",
+         "kapacitet": 200},
+        {"ime_sale": "B1",
+         "kapacitet": 80},
+        {"ime_sale": "B2",
+         "kapacitet": 95}]
+
+
 projekcije = [{"id": 0,
                "datum": datetime.strptime("11 11 2017", "%d %m %Y").date(),
                "vreme": datetime.strptime("21 00", "%H %M").time(),
                "duzina": 120,
                "cena": 300.0,
                "film": filmovi[0]["ime"],
-               "sala": "A1",
+               "sala": sale[0]["ime_sale"],
                "obrisana": False,
                "broj_slobodnih_mesta": 200,
                "broj_ukupnih_mesta": 250
                }]
+
 
 
 def unos_datuma():
@@ -60,13 +71,25 @@ def izbor_zanra():
             for i in range(len(zanrovi)):
                 print(str(i) + " - " + zanrovi[i])            
             izbor = int(input("Vas izbor: "))
-            izbor = zanrovi[izbor]
-            break
+            return zanrovi[izbor]
         except ValueError:
             print("Molimo unesite broj ispred imena zeljenog zanra.")
         except IndexError:
             print("Izabrali ste nepostojeci zanr. Molimo da odaberete neki od ponudjenih.")
-    return izbor
+            
+def izbor_sale():
+    while True:
+        try:
+            print("Izaberite salu u kojoj ce se odrzavati projekcija: ")
+            for i in range(len(sale)):
+                print(str(i) + " - " + sale[i]["ime_sale"])
+            izbor = int(input("Vas izbor: "))
+            return sale[izbor]
+        except ValueError:
+            print("Molimo unesite broj ispred imena sale.")
+        except IndexError:
+            print("Izabrali ste nepostojecu salu. Molimo da odaberete neki od ponudjenih.")
+            
 
 def unos_filma():
     print("Ova opcija nije omogucena.")
@@ -102,9 +125,9 @@ def unos_projekcije():
     vreme = unos_vremena()
     duzina = unos_duzine()
     film = izbor_filma()
-    sala = input("Unesite salu projekcije: ")
-    broj_slobodnih_mesta = input("Unesite broj slobodnih mesta: ")
-    broj_ukupnih_mesta = input("Unesite broj ukupnih mesta: ")
+    sala = izbor_sale()
+    broj_slobodnih_mesta = sala["kapacitet"]
+    broj_ukupnih_mesta = sala["kapacitet"]
     projekcije.append({"id": len(projekcije), "datum": datum, "vreme": vreme, "duzina": duzina, "film": film["ime"], "obrisana": False, "broj_slobodnih_mesta": broj_slobodnih_mesta, "broj_ukupnih_mesta": broj_ukupnih_mesta})
     for projekcija in projekcije:
         print("""
@@ -114,16 +137,43 @@ Duzina: {2}
 Film: {3}
 Broj ukupnih mesta: {4}
 Broj slobodnih mesta: {5}
+Sala: {6}
 
-""".format(projekcija["datum"], projekcija["vreme"], projekcija["duzina"], projekcija["film"], projekcija["broj_ukupnih_mesta"], projekcija["broj_slobodnih_mesta"]))
+""".format(projekcija["datum"], projekcija["vreme"], projekcija["duzina"], projekcija["film"], projekcija["broj_ukupnih_mesta"], projekcija["broj_slobodnih_mesta"], projekcija["sala"]))
 
 def pretraga_projekcija():
-    print("Ova opcija nije omogucena.")
+    print("Pretrazite projekciju prema:")
+    print("1 - ID-u projekcije")
+    print("2 - Nazivu filma")
+    print("3 - Zanru filma")
+    print("4 - Sali prikazivanja")
+    unos = unos_broja("Vas izbor: ")
+    print("Pretraga projekcija nije omogucena.")
     
 def brisanje_projekcije():
-    print("Ova opcija nije omogucena.")
-
-def izmena_projekcije():
-    print("Ova opcija nije omogucena.")    
+    print("Odaberite projekciju za brisanje:")
+    for projekcija in projekcije:
+        print(str(projekcija["id"]) + " - " + projekcija["film"] + " | " + str(projekcija["datum"]) + " u " + str(projekcija["vreme"]))
+    unos = unos_broja()
+    print("Brisanje projekcije nije omoguceno.")
+    '''for projekcija in projekcije:
+        if unos == projekcija["id"]:
+            projekcija["obrisana"] = True'''
     
+def izmena_projekcije():
+    print("Odaberite projekciju za izmenu.")
+    for projekcija in projekcije:
+        print(str(projekcija["id"]) + " - " + projekcija["film"] + " | " + str(projekcija["datum"]) + " u " + str(projekcija["vreme"]))
+    unos = unos_broja("Vas izbor: ")
+    print("Izmena projekcija nije omogucena.")
+
+def unos_broja(tekst):
+    while True:
+        try:
+            unos = int(input(tekst))
+            return unos
+        except ValueError:
+            print("Molimo unesite odgovarajuci broj.")
+
+
 
