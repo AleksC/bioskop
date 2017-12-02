@@ -1,16 +1,19 @@
 from datetime import datetime
 
+#dozvoljeni tipovi zanra, od veceg znacaja za drugi deo projekta kada se doda funkcija dodavanja filmova
 zanrovi = ["sci-fi", "fantasy", "action", "thriller", "horror"]
 
+#primeri filmova
 filmovi = [{"id": 0,
             "ime": "Star Wars",
-            "zanr": "sci-fi"
+            "zanr": zanrovi[0]
             },
            {"id": 1,
             "ime": "Harry Potter",
-            "zanr": "fantasy"
+            "zanr": zanrovi[1]
             }]
 
+#definisane sale radi automatskog dodeljivanja broja ukupnih i slobodnih mesta novoj projekciji
 sale = [{"ime_sale": "A1",
          "kapacitet": 150},
         {"ime_sale": "A2",
@@ -20,7 +23,7 @@ sale = [{"ime_sale": "A1",
         {"ime_sale": "B2",
          "kapacitet": 95}]
 
-
+#primer projekcije
 projekcije = [{"id": 0,
                "datum": datetime.strptime("11 11 2017", "%d %m %Y").date(),
                "vreme": datetime.strptime("21 00", "%H %M").time(),
@@ -34,8 +37,7 @@ projekcije = [{"id": 0,
                }]
 
 
-
-def unos_datuma():
+def unos_datuma(): #Funkcija koja proverava da li je datum unesen u ispravnom formatu
     while True:
         try:
             datum = input("Unesite datum projkecije u formatu dd mm yyyy: ")
@@ -45,7 +47,7 @@ def unos_datuma():
             print("Molimo unesite podatke u navedenom formatu.")
     return datum        
 
-def unos_vremena():
+def unos_vremena(): #Funkcija koja proverava da li je vreme uneseno u ispravnom formatu
     while True:
         try:
             vreme = input("Unesite vreme projkecije u formatu hh mm: ")
@@ -56,15 +58,13 @@ def unos_vremena():
     return vreme
 
 def unos_duzine():
-    while True:
-        try:
-            duzina = int(input("Unesite duzinu trajanja projkecije u minutima: "))
-            break
-        except ValueError:
-            print("Molimo unesite podatke u navedenom formatu.")
-    return duzina
+    """Funkcija za dodavanje duzine projekcije.
+    Ovaj deo planiram da promenim za drugi deo projekta,
+    tako da se duzina projekcija dodaje pri unosu filma
+    i automatski dodeljuje projekciji tog filma kada se ona kreira."""
+    return unos_broja("Unesite duzinu trajanja projkecije u minutima: ") #poziv funkcije koja proverava da li je unet broj
 
-def izbor_zanra():
+def izbor_zanra(): #Funkcija za izbor zanra koja ce se koristiti kada se bude unosio film u drugom delu projekta
     while True:
         try:
             print("Izaberite jedan od ponudjenih zanrova: ")
@@ -77,7 +77,7 @@ def izbor_zanra():
         except IndexError:
             print("Izabrali ste nepostojeci zanr. Molimo da odaberete neki od ponudjenih.")
             
-def izbor_sale():
+def izbor_sale(): #Funkcija za odabir sale
     while True:
         try:
             print("Izaberite salu u kojoj ce se odrzavati projekcija: ")
@@ -91,9 +91,8 @@ def izbor_sale():
             print("Izabrali ste nepostojecu salu. Molimo da odaberete neki od ponudjenih.")
             
 
-def unos_filma():
+def unos_filma(): #Za prvi deo projekta nije omogucena
     print("Ova opcija nije omogucena.")
-    return izbor_filma()
 
 def izbor_filma():
     print("Izaberite jedan od ponudjenih filmova: ")
@@ -110,16 +109,12 @@ def izbor_filma():
             print("Molimo unesite broj ispred imena zeljenog filma.")
         except IndexError:
             if izbor == len(filmovi):
-                izbor = unos_filma
-                break
+                print("Ova opcija nije omogucena.")
             else:
                 print("Izabrali ste nepostojeci film. Ukoliko zelite da dodate novi film pritisnite " + str(len(filmovi)))
-    if callable(izbor):
-        return izbor()
-    else:
-        return izbor
+    return izbor
 
-def unos_projekcije():
+def unos_projekcije(): #Funkcija za dodavanje projekcije
     print("Unos nove projekcije: ")
     datum = unos_datuma()
     vreme = unos_vremena()
@@ -128,9 +123,11 @@ def unos_projekcije():
     sala = izbor_sale()
     broj_slobodnih_mesta = sala["kapacitet"]
     broj_ukupnih_mesta = sala["kapacitet"]
-    projekcije.append({"id": len(projekcije), "datum": datum, "vreme": vreme, "duzina": duzina, "film": film["ime"], "obrisana": False, "broj_slobodnih_mesta": broj_slobodnih_mesta, "broj_ukupnih_mesta": broj_ukupnih_mesta})
-    for projekcija in projekcije:
-        print("""
+    #Pridruzivanje unetih podataka u listu kao recnik
+    projekcije.append({"id": len(projekcije), "datum": datum, "vreme": vreme, "duzina": duzina, "film": film["ime"], "sala": sala["ime_sale"], "obrisana": False, "broj_slobodnih_mesta": broj_slobodnih_mesta, "broj_ukupnih_mesta": broj_ukupnih_mesta})
+    projekcija = len(projekcije)-1
+    #Stampanje unetih podataka
+    print(""" 
 Datum: {0}
 Vreme: {1}
 Duzina: {2}
@@ -139,9 +136,9 @@ Broj ukupnih mesta: {4}
 Broj slobodnih mesta: {5}
 Sala: {6}
 
-""".format(projekcija["datum"], projekcija["vreme"], projekcija["duzina"], projekcija["film"], projekcija["broj_ukupnih_mesta"], projekcija["broj_slobodnih_mesta"], projekcija["sala"]))
+""".format(projekcije[projekcija]["datum"], projekcije[projekcija]["vreme"], projekcije[projekcija]["duzina"], projekcije[projekcija]["film"], projekcije[projekcija]["broj_ukupnih_mesta"], projekcije[projekcija]["broj_slobodnih_mesta"], projekcije[projekcija]["sala"]))
 
-def pretraga_projekcija():
+def pretraga_projekcija(): #Funkcija za pretragu po datim kriterijumima, nije omogucena za prvi deo projekta
     print("Pretrazite projekciju prema:")
     print("1 - ID-u projekcije")
     print("2 - Nazivu filma")
@@ -150,24 +147,24 @@ def pretraga_projekcija():
     unos = unos_broja("Vas izbor: ")
     print("Pretraga projekcija nije omogucena.")
     
-def brisanje_projekcije():
+def brisanje_projekcije(): #Funkcija za brisanje projekcije, nije omogucena za prvi deo projekta
     print("Odaberite projekciju za brisanje:")
     for projekcija in projekcije:
         print(str(projekcija["id"]) + " - " + projekcija["film"] + " | " + str(projekcija["datum"]) + " u " + str(projekcija["vreme"]))
-    unos = unos_broja()
+    unos = unos_broja("Vas izbor: ")
     print("Brisanje projekcije nije omoguceno.")
     '''for projekcija in projekcije:
         if unos == projekcija["id"]:
             projekcija["obrisana"] = True'''
     
-def izmena_projekcije():
+def izmena_projekcije(): #Funkcija za izmenu projekcije, nije omogucena za prvi deo projekta
     print("Odaberite projekciju za izmenu.")
     for projekcija in projekcije:
         print(str(projekcija["id"]) + " - " + projekcija["film"] + " | " + str(projekcija["datum"]) + " u " + str(projekcija["vreme"]))
     unos = unos_broja("Vas izbor: ")
     print("Izmena projekcija nije omogucena.")
 
-def unos_broja(tekst):
+def unos_broja(tekst): #Pomocna funkcija za ispravan unos broja. Korisiti se uglavnom za izbor stavki u menijima
     while True:
         try:
             unos = int(input(tekst))
